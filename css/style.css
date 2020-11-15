@@ -1,3 +1,31 @@
 #navbar {
     padding: 20px;
 }
+
+.fa-sun {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.container {
+    height: 300px;
+    margin-top: 10px;
+    position: relative;
+    border: 3px solid blue;
+  }
+.section {
+    height: 420px;
+    width: 100%;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+
+#introSection {
+    margin-top: 100px;
+}
