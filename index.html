@@ -44,9 +44,45 @@
     
     <!-- Dot charts for Heat-Related Deaths -->
     <div class="section" id="casualtySection">
-      <div class="container">
+      <div class="container" style="border: 0px">
         <div class="vertical-center">
-          <p> Casualties</p>
+          <div class="row">
+            <div class="col-md-12">
+              <h3><span class="h3-sub">Heat-Related Deaths in the US.</span> 1999-2018</h3>
+              <h4>Attention!</h4>
+              <div class = "row">
+                <div id = "start">1999</div>
+                <p style="padding-left: 4px; padding-right: 4px"> - </p>
+                <div id = "end">2018</div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-md-12">
+              <div id="totaldiv"></div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div>
+              <select id="categorySelector" class="custom-select align-self-center" style="width: 70%" onchange = "categoryChange()">
+                <option value="absDeathsByGender">Average Deaths by Gender (absolute)</option>
+                <option value="absDeaths">Average Deaths per Year (absolute)</option>
+                <option value="absDeathsByRace">Average Deaths by Racial Group (absolute)</option>
+                <option value="absDeathsByAge">Average Deaths by Age Group (absolute)</option>
+                <option value="relDeathsByGender">Average Deaths by Gender (relative to population)</option>
+                <option value="relDeathsByRace">Average Deaths by Racial Group (relative to population)</option>
+                <option value="relDeathsByAge">Average Deaths by Age Group (relative to population)</option>
+              </select>
+            </div>
+        
+            <div class="col-md-12">
+              <div id="dotdiv"></div>
+            </div>
+        
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -62,9 +98,26 @@
 
     <!-- Map visualization for Heat Waves -->
     <div class="section" id="heatwaveSection"> 
-      <div class="container">
+      <div class="container" style="border: 0px">
         <div class="vertical-center">
-          <p> Heat Waves</p>
+          <h1 class="title" id="title_location"></h1>
+          <p class="subtitle">Annual</p>
+          <div id="total_nv"></div>
+          <div class="row justify-content-center" style="height: 400px;">
+            <div class="align-self-center">
+              <div id="Chart_1"></div>
+            </div>
+          </div>
+          <div class="row" style="height: 400px;">
+            <div class="col-md-6" style="text-align:center;">
+              <p class="subtitle" id="month_subtitle">Monthly</p>
+              <div id="Chart_2"></div>
+            </div>
+            <div class="col-md-6" style="text-align:center;">
+              <p class="subtitle" id="day_subtitle">Daily</p>
+              <div id="Chart_3"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -113,7 +166,10 @@
 	<!-- d3 -->
 	<script src="https://d3js.org/d3.v6.min.js"></script>
 
-	<!-- Your implementation -->
-	<script src="js/main.js"></script>
+  <!-- Your implementation -->
+  <script src="js/main.js"></script>
+  <script src="js/heatmap.js"></script>
+  <script src="js/final_dotVis.js"></script>
+  <script src="js/final_casualtyVis.js"></script>
 </body>
 </html>

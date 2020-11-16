@@ -1,0 +1,82 @@
+
+  {
+    "total_avg": 688,
+    "gender": [
+      {
+        "gender": "Female",
+        "value": 217
+      },
+      {
+        "gender": "Male",
+        "value": 471
+      }
+    ],
+    "age": [
+      {
+        "age": "< 1 year",
+        "value": 16
+      },
+      {
+        "age": "1-4 years",
+        "value": 28
+      },
+      {
+        "age": "5-14 years",
+        "value": 5
+      },
+      {
+        "age": "15-24 years",
+        "value": 21
+      },
+      {
+        "age": "25-34 years",
+        "value": 42
+      },
+      {
+        "age": "35-44 years",
+        "value": 68
+      },
+      {
+        "age": "45-54 years",
+        "value": 111
+      },
+      {
+        "age": "55-64 years",
+        "value": 116
+      },
+      {
+        "age": "65-74 years",
+        "value": 106
+      },
+      {
+        "age": "75-84 years",
+        "value": 105
+      },
+      {
+        "age": "85+ years",
+        "value": 64
+      },
+      {
+        "age": "Not stated",
+        "value": 5
+      }
+    ],
+    "race": [
+      {
+        "race": "American Indian or Alaska Native",
+        "value": 15
+      },
+      {
+        "race": "Asian or Pacific Islander",
+        "value": 12
+      },
+      {
+        "race": "Black or African American",
+        "value": 143
+      },
+      {
+        "race": "White",
+        "value": 518
+      }
+    ]
+  }

@@ -1,21 +1,19 @@
-/* #navbar {
+#navbar {
     padding: 20px;
-} */
+}
 
 .fa-sun {
     font-size: 30px;
-    margin-right: 10px;
 }
 
 .container {
     height: 50%;
     position: relative;
     border: 3px solid blue;
-    top: 20%;
+    top: 40%;
   }
 .section {
-    height: 600px;
-    width: 100%;
+    height: 1000px;
 }
 
 .vertical-center {
@@ -27,5 +25,88 @@
 
 
 #introSection {
-    margin-top: 100px;
+    margin-top: 0px;
 }
+
+body {
+    background: no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    background-color: #F1F3F3;
+    /*background-color: floralwhite;*/
+}
+
+.title {
+    font: 20px Arial, sans-serif;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    text-align: center;
+}
+
+.subtitle {
+    font: 20px Arial, sans-serif;
+    text-align: center;
+}
+
+.message {
+    font: 14px Arial, sans-serif;
+}
+
+.clock {
+    font: 10px Arial, sans-serif;
+}
+
+.cell1 {
+    stroke-width: 0.1;
+    stroke: #f2f2f2;
+}
+
+
+.cell2 {
+    stroke-width: 0.5;
+    stroke: #f2f2f2;
+}
+
+.cell3 {
+    stroke-width: 0.5;
+    stroke: #e6e6e6;
+}
+
+.arc:hover{
+    fill: #ffd700;
+    opacity: 0.2;
+}
+
+
+.outline {
+    stroke-width: 0.2;
+    stroke: #808080;
+}
+
+.axis path {
+    display: none;
+}
+
+
+.axis {
+    font: 12px Arial, sans-serif;
+}
+
+.interactivity {
+    stroke-width: 0.3;
+    stroke: #808080;
+}
+
+.interactivity2 {
+    stroke-width: 0.1;
+    stroke: #b3b3b3;
+}
+
+
+#total_nv {
+    text-align: center;
+}
+
