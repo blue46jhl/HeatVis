@@ -51,6 +51,10 @@ body {
     text-align: center;
 }
 
+.legend {
+    font: 13px Arial, sans-serif;
+}
+
 .message {
     font: 14px Arial, sans-serif;
 }
@@ -110,3 +114,6 @@ body {
     text-align: center;
 }
 
+.side{
+    width: 50px;
+}

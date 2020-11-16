@@ -40,7 +40,9 @@ function chart1() {
         function heat_month (d) {
             var count=0;
             for (var i=dataset.slice(hours[d-1][0], hours[d-1][1]).length; i--;) {
-                count+=dataset.slice(hours[d-1][0], hours[d-1][1])[i];
+                if(dataset.slice(hours[d-1][0], hours[d-1][1])[i] > 0) {
+                    count++
+                }
             }
             return count;
         }
@@ -168,18 +170,22 @@ function chart1() {
                     + "\n" + "Heat index hours: " + heat_month(d)
                     + "\n" + "Heat index percent: " + Math.round(heat_month(d) / (hours[d-1][1] - hours[d-1][0] + 1) * 100) + "%";
             });
-        let annual = data[location];
-        sum = annual.reduce((pv, cv) => pv + cv, 0);
-        document.getElementById("total_nv").innerHTML = "Heat index hour: " + sum + "hours";
+        let count=0;
+        for (var i=dataset.length; i--;) {
+            if(dataset[i] > 0) {
+                count++
+            }
+        }
+        document.getElementById("total_nv").innerHTML = "Heat index hour: " + count + "hours";
     }
 }
 
 
 // Monthly chart 시작
 function chart2(i, k) {
-    let margin = {top: 20, right: 115, bottom: 40, left: 115};
+    let margin = {top: 20, right: 60, bottom: 40, left: 60};
 
-    let width = 540 - margin.left - margin.right,
+    let width = 400 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom;
 
 
@@ -266,17 +272,20 @@ function chart2(i, k) {
         // 각 day를 표현하는 interactivity rectangle 생성하기 전에 각 달별로 날짜 만큼 pixcel deduct
         let deduct = 0;
         if (i == 2) {
-            deduct = 30;
+            deduct = 28;
         }
         else if (i == 4 || i == 6 || i == 9 || i == 11) {
-            deduct = 10;
+            deduct = 30;
+        }
+        else {
+            deduct = 31;
         }
 
         // Outline용 rectangle 생성
         svg.append("g")
             .append("rect")
             .attr("class", "outline")
-            .attr("width", width - deduct)
+            .attr("width", 10 * deduct)
             .attr("height", height)
             .attr("x", margin.left)
             .attr("y", margin.top)
@@ -285,7 +294,7 @@ function chart2(i, k) {
         // Axis를 위한 xScale 생성
         let xScale = d3.scaleTime()
             .domain([new Date("2019-01-01 00:00:00"), new Date("2019-01-31 23:59:59")])
-            .range([margin.left, margin.left + width]);
+            .range([margin.left, margin.left + 10 * deduct]);
 
         // x-axis 생성
         let xAxis = d3.axisBottom()
@@ -330,7 +339,7 @@ function chart2(i, k) {
         }
 
         // 지정된 날의 NVhour 계산 (tooltip에 사용)
-        function NV_day (d) {
+        function heatindex_day (d) {
             var count=0;
             for (var i=dataset.slice(d * 24, d * 24 + 24).length; i--;) {
                 count+=dataset.slice(d * 24, d * 24 + 24)[i];
@@ -346,10 +355,10 @@ function chart2(i, k) {
             .append("rect")
             .attr("class", "interactivity2")
             .attr("x", (d, i) => {
-                return i * (width / 31) + margin.left;
+                return i * 10 + margin.left;
             })
             .attr("y", margin.top)
-            .attr("width", (width / 31))
+            .attr("width", 10)
             .attr("height", 240)
             .style("fill", "none")
             .style("pointer-events", "all")
@@ -387,22 +396,22 @@ function chart2(i, k) {
                 if (d == 0 || d == 20 || d == 30) {
                     return "Day: " + months[i-1] + " " + (d+1) + "st"
                         + "\n" + "Total hours: " + "24"
-                        + "\n" + "Heat index hours: " + NV_day(d);
+                        + "\n" + "Heat index hours: " + heatindex_day(d);
                 }
                 else if (d == 1 || d == 21) {
                     return "Day: " + months[i-1] + " " + (d+1) + "nd"
                         + "\n" + "Total hours: " + "24"
-                        + "\n" + "Heat index hours: " + NV_day(d);
+                        + "\n" + "Heat index hours: " + heatindex_day(d);
                 }
                 else if (d == 2 || d == 22) {
                     return "Day: " + months[i-1] + " " + (d+1) + "rd"
                         + "\n" + "Total hours: " + "24"
-                        + "\n" + "Heat index hours: " + NV_day(d);
+                        + "\n" + "Heat index hours: " + heatindex_day(d);
                 }
                 else {
                     return "Day: " + months[i-1] + " " + (d+1) + "th"
                         + "\n" + "Total hours: " + "24"
-                        + "\n" + "Heat index hours: " + NV_day(d);
+                        + "\n" + "Heat index hours: " + heatindex_day(d);
                 }});
 
 
@@ -411,9 +420,9 @@ function chart2(i, k) {
 
 // Daily chart 시작
 function chart3(i) {
-    let margin = {top: 20, right: 115, bottom: 40, left: 115};
+    let margin = {top: 20, right: 60, bottom: 40, left: 60};
 
-    let width = 540 - margin.left - margin.right,
+    let width = 360 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom;
 
 
@@ -527,6 +536,78 @@ function chart3(i) {
     }
 }
 
+function legend(i) {
+    let margin = {top: 20, right: 10, bottom: 40, left: 10};
+
+    let width = 270 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+    let svg = d3.select("#legend")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+
+    svg.append("rect")
+        .attr("class", "legend_square")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", 10)
+        .attr("y", 22)
+        .style("fill", "#ffd700")
+
+    svg.append("text")
+        .text("Caution (heat index 27-32°C)")
+        .attr("class", "legend")
+        .attr("x", 40)
+        .attr("y", 38)
+
+    svg.append("rect")
+        .attr("class", "legend_square")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", 10)
+        .attr("y", 72)
+        .style("fill", "#ff8c00")
+
+    svg.append("text")
+        .text("Extreme caution (heat index 33-39°C)")
+        .attr("class", "legend")
+        .attr("x", 40)
+        .attr("y", 88)
+
+    svg.append("rect")
+        .attr("class", "legend_square")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", 10)
+        .attr("y", 122)
+        .style("fill", "#ff0000")
+
+    svg.append("text")
+        .text("Danger (heat index 40-51°C)")
+        .attr("class", "legend")
+        .attr("x", 40)
+        .attr("y", 138)
+
+    svg.append("rect")
+        .attr("class", "legend_square")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", 10)
+        .attr("y", 172)
+        .style("fill", "#660000")
+
+    svg.append("text")
+        .text("Extreme danger (heat index 51>°C)")
+        .attr("class", "legend")
+        .attr("x", 40)
+        .attr("y", 188)
+
+}
+
+
+
 
 
 chart1()
@@ -534,3 +615,5 @@ chart1()
 chart2()
 
 chart3()
+
+legend()
