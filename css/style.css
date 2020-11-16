@@ -1,6 +1,6 @@
-#navbar {
+/* #navbar {
     padding: 20px;
-}
+} */
 
 .fa-sun {
     font-size: 30px;
@@ -8,13 +8,13 @@
 }
 
 .container {
-    height: 300px;
-    margin-top: 10px;
+    height: 50%;
     position: relative;
     border: 3px solid blue;
+    top: 20%;
   }
 .section {
-    height: 420px;
+    height: 600px;
     width: 100%;
 }
 
