@@ -5,6 +5,8 @@
 // init global variables, switches, helper functions
 let carbonChart;
 
+let selectedTimeRange = [];
+
 function updateAllVisualizations(){
     carbonChart.wrangleData()
 }
@@ -13,8 +15,10 @@ function updateAllVisualizations(){
 let promises = [
     d3.csv("data/heat_final.csv"),
     // d3.json("data/totalDeathData.json")
-    // d3.csv("data/north_america_co2.csv"),
-    // d3.csv("data/disasters_1930.csv")
+    d3.csv("data/north_america_co2.csv"),
+    d3.csv("data/disaster_1930.csv"),
+    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json"),
+    d3.csv("data/heatwave_us_1981.csv")
 ];
 
 Promise.all(promises)
@@ -30,14 +34,23 @@ function initMainPage(dataArray) {
     // (3) Create event handler
     let MyEventHandler = {};
 
-    // init dot vis
+    // init visualizations
     myCasualtyVis = new CasualtyVis('totaldiv', dataArray[0], MyEventHandler);
     myDotVis = new DotVis('dotdiv', dataArray[0]);
+    myCarbonVis = new CarbonVis('carbondiv', dataArray[1], dataArray[4])
+     // init brush
+    myBrushVis = new BrushVis('brushDiv', dataArray[1]);
+    myDisasterMapVis = new DisasterMapVis('disasterdiv', dataArray[2], dataArray[3])
 
     // (5) Bind event handler
     $(MyEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
         myCasualtyVis.onSelectionChange(rangeStart, rangeEnd);
         myDotVis.onSelectionChange(rangeStart, rangeEnd);
     });
-    // myCarbonChart = new CarbonChart('climateSection', allDataArray[0])
 }
+
+function categoryChange() {
+    selectedCategory = $('#climateCategorySelector').val();
+    myCarbonVis.wrangleData();
+}
+

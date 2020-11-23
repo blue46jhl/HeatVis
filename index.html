@@ -130,7 +130,15 @@
     <div class="section" id="disasterSection"> 
       <div class="container">
         <div class="vertical-center">
-          <p> natural Disasters</p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-12">
+                <div class="row" style="background: lightgrey; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
+                  <div id="disasterdiv" class="align-self-center" style="height: 80vh; width:132vh; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -139,7 +147,35 @@
     <div class="section" id="climateSection"> 
       <div class="container">
         <div class="vertical-center">
-          <p> Climate Change</p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-12">
+                <div class="row" style="background: lightgrey; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
+                  <div class="col" style="border: thin solid grey; border-radius: 5px; background:lightcyan">
+                    <div class="row">
+                      <div class="col-8">
+                        <div class="row justify-content-center" style="height: 120%; width:50%">
+                          <p class="align-self-center" >
+                            <select id='climateCategorySelector' class="custom-select align-self-center" onchange="categoryChange()">
+                              <option value="cum_heatwaves" selected>Cumulative Heat Wave Days</option>
+                              <option value="avg_heatwaves">Average Heat Wave Days</option>
+                            </select>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="background: lightgrey; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 0vh">
+                  <div id="carbondiv" class="align-self-center" style="height: 60vh; width:132vh; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
+                </div>
+                <div class="row" style="height: 20vh; background: #bdbdbd; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
+                  <div id="brushDiv" class ="align-self-center" style="height: 100%; width:100%; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
+              </div>
+              </div>
+    
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -168,12 +204,18 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
 	<!-- d3 -->
-	<script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+	<script src="https://d3js.org/topojson.v2.min.js"></script>
+	<script src="https://d3js.org/d3-geo.v1.min.js"></script>
 
   <!-- Your implementation -->
   <script src="js/main.js"></script>
   <script src="js/heatmap.js"></script>
   <script src="js/final_dotVis.js"></script>
   <script src="js/final_casualtyVis.js"></script>
+  <script src="js/carbonVis.js"></script>
+  <script src="js/brushVis.js"></script>
+  <script src="js/disastermap.js"></script>
 </body>
 </html>
