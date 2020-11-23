@@ -126,10 +126,10 @@ stroke: #809686;
 stroke-width: 3px;
 }
 
-.d3-tip {
+.tooltip {
     line-height: 2;
     padding: 5px;
-    background: rgba(0, 0, 0, 0.8);
+    background: gray;
     color: #fff;
     width: 20%;
     border-radius: 2px;

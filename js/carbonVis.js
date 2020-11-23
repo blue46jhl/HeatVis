@@ -61,8 +61,8 @@ class CarbonVis {
             .style("opacity", 1)
         
         // append tooltip
-        vis.tooltip = d3.select("#" + vis.parentElement).append('div')
-            .attr('class', "d3-tip")
+        vis.tooltip = d3.select("body").append('div')
+            .attr('class', "tooltip")
             .style("z-index", 2)
             .style("border", "solid")
             .style("border-width", "1px")
@@ -149,7 +149,7 @@ class CarbonVis {
                     .style("opacity", .9)
                 vis.tooltip.html("Year: " + vis.formatDate(d.year) + "</br>" + selectedCategory + ": " + d[selectedCategory])
                     .style("left", (event.pageX) + "px")		
-                    .style("top", (event.pageY - 68) + "px")
+                    .style("top", (event.pageY - 100) + "px")
             })
             .on("mouseout", function(d) {
                 d3.select(this)

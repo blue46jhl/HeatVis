@@ -6,10 +6,12 @@
 class DisasterMapVis{
 
     // constructor method to initialize Timeline object
-    constructor(parentElement, disasterData, geoData) {
+    constructor(parentElement, disasterData, geoData, heatData, zipData) {
         this.parentElement = parentElement;
         this.disasterData = disasterData;
         this.geoData = geoData;
+        this.heatData = heatData;
+        this.zipData = zipData;
         this.displayData = [];
 
         this.initMap()
@@ -32,7 +34,7 @@ class DisasterMapVis{
         vis.svg.append('g')
             .attr('class', 'title map-title')
             .append('text')
-            .text('Disasters in the USA 1930-2010')
+            .text('Historical Natural Disaster Trends 1930-2010')
             .attr("font-family", "Gothic")
             .attr("font-weight", 900)
             .attr("font-size", "20px")
@@ -43,17 +45,17 @@ class DisasterMapVis{
         vis.path = d3.geoPath()
 
         // convert TopoJSON data into GeoJSON data
-        vis.country = topojson.feature(vis.geoData,vis.geoData.objects.counties).features;
+        vis.country = topojson.feature(vis.geoData,vis.geoData.objects.states).features;
 
         // define viewpoint and zoom
         vis.viewpoint = {'width': 975, 'height': 610};
             vis.zoom = vis.width / vis.viewpoint.width;
 
         // Draw states
-        vis.counties = vis.svg.selectAll(".county")
+        vis.states = vis.svg.selectAll(".state")
             .data(vis.country)
             .enter().append("path")
-            .attr('class', 'county map')
+            .attr('class', 'state map')
             .attr("d", vis.path)
             .style("fill", "steelblue")
             .attr("opacity", .9)
@@ -62,7 +64,7 @@ class DisasterMapVis{
 
         // define a color scale
         vis.colorScale = d3.scaleLinear()
-            .range(["lightblue", "darkblue"])
+            .range(["orange", "darkred"])
 
         // // create a legend
 
@@ -89,13 +91,71 @@ class DisasterMapVis{
             .attr('class', 'legend')
             .attr('transform', `translate(${vis.width * 2.8 / 4}, ${vis.height-20})`)
             .style("fill", "url(#linear-gradient)")
-            .call(vis.xAxis)
+          
 
-        
+        vis.fips_code = {
+            "01": "Alabama",
+            "02": "Alaska",
+            "04": "Arizona",
+            "05": "Arkansas",
+            "06": "California",
+            "08": "Colorado",
+            "09": "Conneticut",
+            "10": "Delaware",
+            "12": "Florida",
+            "13": "Georgia",
+            "15": "Hawaii",
+            "16": "Idaho",
+            "17": "Illinois",
+            "18": "Indiana",
+            "19": "Iowa",
+            "20": "Kansas",
+            "21": "Kentucky",
+            "22": "Louisiana",
+            "23": "Maine",
+            "24": "Maryland",
+            "25": "Massachussetts",
+            "26": "Michigan",
+            "27": "Minnesota",
+            "28": "Mississippi",
+            "29": "Missouri",
+            "30": "Montana",
+            "31": "Nebraska",
+            "32": "Nevada",
+            "33": "New Hampshire",
+            "34": "New Jersey",
+            "35": "New Mexico",
+            "36": "New York",
+            "37": "North Carolina",
+            "38": "North Dakota",
+            "39": "Ohio",
+            "40": "Oklahoma",
+            "41": "Oregon",
+            "42": "Pennsylvania",
+            "44": "Rhode Island",
+            "45": "South Carolina",
+            "46": "South Dakota",
+            "47": "Tennessee",
+            "48": "Texas",
+            "49": "Utah",
+            "50": "Vermont",
+            "51": "Virginia",
+            "53": "Washington",
+            "54": "West Virginia",
+            "55": "Wisconsin",
+            "56": "Wyoming",
+            "60": "American Samoa",
+            "66": "Guam",
+            "69": "Northern Mariana Islands",
+            "72": "Puerto Rico",
+            "78": "Virgin Islands"
+        };
+
         // append tooltip
         vis.tooltip = d3.select("body").append('div')
             .attr('class', "tooltip")
             .attr('id', 'mapTooltip')
+
         vis.wrangleData()
     }
 
@@ -103,58 +163,80 @@ class DisasterMapVis{
         let vis = this
 
         // init final data structure in which both data sets will be merged into
-        vis.countyInfo = {}
+    
+        vis.stateInfo = {};
 
-        vis.disasterData.forEach(county => {
-            // populate the final data structure
-            let countyName = county.NAME10
-            vis.countyInfo[county.fips_new] =
-                {
-                    county: countyName,
-                    numberOfDisasters: county.disaster,
-                    category: county.disaster_category,
-                    severeDisasters: county.severe,
-                    superSevereDisasters: county.supersevere
-                }
+        let stationData = {};
+        let filtered_disaster_data = [];
+        let stateDisastersCount = {};
+
+        // rolling up county data into a state dataset
+        vis.disasterData.forEach(function(row) {
+            let fips = row.fips_new.toString().slice(0,2)
+            filtered_disaster_data.push({
+                fips_code: fips,
+                disaster_count: row.disaster
+            })
         })
-        // log all of the data
-        console.log('final data structure for myDataTable', vis.countyInfo);
+        // group data by state
+        let disasterDataByState = Array.from(d3.group(filtered_disaster_data, d =>d.fips_code), ([key, value]) => ({key, value}))
 
-        mapObject.updateMap()
+        // merge disaster state data
+        disasterDataByState.forEach(state => {
+            let stateName =  vis.fips_code[state.key]
+            let disasters = 0;
+            state.value.forEach(row => {
+                disasters += +row.disaster_count
+            })
+            stateDisastersCount[stateName] = disasters
+        })
+
+        // get average heat index for each station in the station-heat-index dataset
+        Object.entries(vis.heatData).forEach(([k,v]) => {
+            stationData[k] = d3.mean(v)
+        })
+
+        // building a map for each state key and average heat index value
+        vis.zipData.forEach(function(row) {
+            if (row.Station_Name in stationData) {
+                vis.stateInfo[row.State] = 
+                {
+                    state: row.State,
+                    heat_index: stationData[row.Station_Name],
+                    disaster_count: stateDisastersCount[row.State]
+                }
+            }
+        })
+
+        console.log(vis.stateInfo)
+
+        vis.updateMap()
 
     }
 
     updateMap(){
-        let mapObject = this;
+        let vis = this;
 
-        let selectedCategory = $('#categorySelector').val()
-
-        mapObject.colorScale.domain([0,d3.max(Object.entries(mapObject.stateInfo), d => d[1][selectedCategory])])
-        mapObject.states
+        vis.colorScale.domain([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])
+        vis.states
                 .style("fill", function(d, index) { 
-                    return mapObject.colorScale(mapObject.stateInfo[d.properties.name][selectedCategory])
+                    return vis.colorScale(vis.stateInfo[d.properties.name].heat_index)
                 })
                 .on('mouseover', function(event, d){
                     d3.select(this)
                         .attr('stroke-width', '2px')
                         .attr('stroke', 'black')
-                        .style("fill", "red")
+                        .style("fill", "lightblue")
                         .attr("opacity", .5)
-                    // attempt to link hover effects
-                    // d3.selectAll(d=> "#" + "state" + d.properties.name)
-                    //     .attr("fill", "purple")
-                    mapObject.tooltip
+                    vis.tooltip
                         .style("opacity", 1)
                         .style("left", event.pageX + 10 + "px")
                         .style("top", event.pageY + "px")
                         .html(`
                             <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 20px">
                                 <h3>${d.properties.name}<h3>
-                                <h4> Population: ${mapObject.stateInfo[d.properties.name].population}</h4>      
-                                <h4> Cases (Absolute): ${mapObject.stateInfo[d.properties.name].absCases}</h4> 
-                                <h4> Deaths (Absolute): ${mapObject.stateInfo[d.properties.name].absDeaths}</h4>
-                                <h4> Cases (Relative): ${d3.format(".3n")(mapObject.stateInfo[d.properties.name].relCases)}%</h4> 
-                                <h4> Deaths (Relative): ${d3.format(".1n")(mapObject.stateInfo[d.properties.name].relDeaths)}% </h4>     
+                                <h4> Heat Index: ${vis.stateInfo[d.properties.name].heat_index}</h4>      
+                                <h4> Disaster Count: ${vis.stateInfo[d.properties.name].disaster_count}</h4>    
                             </div>`)
                 })
                 .on('mouseout', function(event, d){
@@ -162,18 +244,18 @@ class DisasterMapVis{
                         .attr('stroke-width', '1px')
                         .attr("stroke", "black")
                         .attr("opacity", 1)
-                        .style("fill", d => mapObject.colorScale(mapObject.stateInfo[d.properties.name][selectedCategory]))
+                        .style("fill", d => vis.colorScale(vis.stateInfo[d.properties.name].heat_index))
        
-                    mapObject.tooltip
+                    vis.tooltip
                         .style("opacity", 0)
                         .style("left", 0)
                         .style("top", 0)
                         .html(``);
                 })
-        mapObject.xAxis.tickValues([0,d3.max(Object.entries(mapObject.stateInfo), d => d[1][selectedCategory])])
-        mapObject.x.domain([0,d3.max(Object.entries(mapObject.stateInfo), d => d[1][selectedCategory])])
+        vis.xAxis.tickValues([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])
+        vis.x.domain([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])
 
-        mapObject.svg.selectAll(".legend")
-            .call(mapObject.xAxis)
+        vis.svg.selectAll(".legend")
+            .call(vis.xAxis)
     }
 }

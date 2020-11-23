@@ -17,8 +17,10 @@ let promises = [
     // d3.json("data/totalDeathData.json")
     d3.csv("data/north_america_co2.csv"),
     d3.csv("data/disaster_1930.csv"),
-    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json"),
-    d3.csv("data/heatwave_us_1981.csv")
+    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json"),
+    d3.csv("data/heatwave_us_1981.csv"),
+    d3.json("data/heat_index_celcius.json"),
+    d3.csv("data/Zip_data+station.csv")
 ];
 
 Promise.all(promises)
@@ -40,7 +42,7 @@ function initMainPage(dataArray) {
     myCarbonVis = new CarbonVis('carbondiv', dataArray[1], dataArray[4])
      // init brush
     myBrushVis = new BrushVis('brushDiv', dataArray[1]);
-    myDisasterMapVis = new DisasterMapVis('disasterdiv', dataArray[2], dataArray[3])
+    myDisasterMapVis = new DisasterMapVis('disasterdiv', dataArray[2], dataArray[3], dataArray[5], dataArray[6])
 
     // (5) Bind event handler
     $(MyEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
