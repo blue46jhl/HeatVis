@@ -5,22 +5,21 @@
 
 class CasualtyVis {
 
-    constructor(parentElement, heatData, MyEventHandler) {
+    constructor(parentElement, heatData) {
         this.parentElement = parentElement;
         this.heatData = heatData;
-        this.MyEventHandler = MyEventHandler;
 
         // parse date method
         this.parseDate = d3.timeParse("%Y");
+        this.dateFormatter = d3.timeFormat("%Y");
 
-        // define colors
         this.initVis()
     }
 
     initVis() {
         let vis = this;
 
-        vis.margin = {top: 60, right: 40, bottom: 60, left: 80};
+        vis.margin = {top: 60, right: 80, bottom: 60, left: 80};
 
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
             vis.height = 400 - vis.margin.top - vis.margin.bottom;
@@ -34,10 +33,10 @@ class CasualtyVis {
 
         // Scales
         vis.x = d3.scaleTime()
-            .range([ 0, vis.width]);
+            .range([0, vis.width]);
 
         vis.y = d3.scaleLinear()
-            .range([vis.height, 0 ]);
+            .range([vis.height, 0]);
 
         // Define x and y axis
         vis.xAxis = d3.axisBottom()
@@ -58,22 +57,25 @@ class CasualtyVis {
             .attr("class", "y-axis axis")
             .attr("transform", "translate(" + (-40) + ",0)");
 
-        // init brushGroup:
+        // // init brushGroup:
         vis.brushGroup = vis.svg.append("g")
             .attr("class", "brush");
 
-        // Initialize brushing component
+        // init brush
         vis.brush = d3.brushX()
             .extent([[0, 0], [vis.width, vis.height]])
-            .on("brush", function (event) {
-                // User just selected a specific region
-                vis.currentBrushRegion = event.selection;
-                vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
+            .on("brush end", function (event) {
+                filteredTimeRange = [vis.x.invert(event.selection[0]), vis.x.invert(event.selection[1])];
+                console.log(filteredTimeRange[0]);
+                console.log(vis.dateFormatter(filteredTimeRange[0]));
 
-                console.log(vis.currentBrushRegion);
+                // update the year range in html
+                d3.select("#start").text(vis.dateFormatter(filteredTimeRange[0]));
+                d3.select("#end").text(vis.dateFormatter(filteredTimeRange[1]));
 
-                // 3. Trigger the event 'selectionChanged' of our event handler
-                $(vis.MyEventHandler).trigger("selectionChanged", vis.currentBrushRegion);
+
+                myDotVis.wrangleData();
+                // myBarVisTwo.wrangleData()
             });
 
         // Append brush component here
@@ -82,28 +84,60 @@ class CasualtyVis {
             .attr("y", -6)
             .attr("height", vis.height + 7);
 
+        // Add a tooltip
+        vis.tooltip = d3.select("body").append('div')
+            .attr('class', "tooltip")
+            .attr('id', 'circleTooltip');
+
         vis.wrangleData();
     }
 
     /*
      *  Data wrangling
      */
-    wrangleData () {
+    wrangleData() {
         let vis = this;
 
         // create empty data structure
-        vis.displayData = [];
+        vis.myData = [];
 
         // Prepare data by looping over stations and populating empty data structure
         vis.heatData.forEach(d => {
             // console.log(d);
+            vis.myData.push(
+                {
+                    time: d.year,
+                    year: vis.parseDate(d.year),
+                    total: +d.total,
+                    population: +d.poplulation,
+                    female: +d.female,
+                    femalePopulation: +d.female_population,
+                    male: +d.male,
+                    malePopulation: +d.male_population
+                }
+            );
+        })
+
+        console.log(vis.myData);
+
+        // Define displayData
+        vis.displayData = [];
+
+        let formatDecimalComma = d3.format(",.2f");
+        vis.myData.forEach(d => {
+            // console.log(d);
             vis.displayData.push(
                 {
-                    year: vis.parseDate(d.year),
-                    total: +d.total
+                    time: d.time,
+                    year: d.year,
+                    total: d.total,
+                    population: d.population,
+                    deathRate: formatDecimalComma(d.total / d.population * 1000000)
                 }
-                );
+            );
         })
+
+        console.log(vis.displayData);
 
         vis.updateVis();
     }
@@ -111,12 +145,9 @@ class CasualtyVis {
     updateVis() {
         let vis = this;
 
-        // Call brush component
-        vis.brushGroup.call(vis.brush);
-
         // Dot size scale
         vis.totalScale = d3.scaleLinear()
-            .domain([d3.min(vis.displayData, d=>d.total ), d3.max(vis.displayData, d=>d.total)])
+            .domain([d3.min(vis.displayData, d => d.total), d3.max(vis.displayData, d => d.total)])
             .range([10, 30]);
 
         // define colors
@@ -124,8 +155,8 @@ class CasualtyVis {
         vis.col_range_high = "#791212";
 
         vis.colorScale = d3.scaleLinear()
-            .domain([d3.min(vis.displayData, d=>d.total ), d3.max(vis.displayData, d=>d.total)])
-            .range([vis.col_range_low,vis.col_range_high]);
+            .domain([d3.min(vis.displayData, d => d.total), d3.max(vis.displayData, d => d.total)])
+            .range([vis.col_range_low, vis.col_range_high]);
 
         // Draw dots
         vis.circles = vis.svg.selectAll("circle")
@@ -148,6 +179,45 @@ class CasualtyVis {
             .attr("stroke", "grey")
             .attr("r", d => vis.totalScale(d.total));
 
+        vis.circles
+            .on('mouseover', function (event, d) {
+                console.log(d);
+
+                // update the area chart when selecting a year
+                // selectedYear = d.year;
+
+                d3.select(this)
+                    .attr('stroke-width', '2px')
+                    .attr("opacity", "0.7")
+                    .attr("stroke", "darkred")
+                    .attr("fill", d => vis.colorScale(d.total));
+
+                vis.tooltip
+                    .style("opacity", 1)
+                    .style("left", event.pageX + 20 + "px")
+                    .style("top", event.pageY + "px")
+                    .html(`
+                        <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 20px;">
+                        <h3> ${d.time}<h3>
+                        <h4> Population: ${d.population}</h4>      
+                        <h4> Deaths (absolute): ${d.total}</h4>
+                        <h4> Death per million: ${d.deathRate}</h4>                        
+                        </div>`);
+            })
+            .on('mouseout', function (event, d) {
+                d3.select(this)
+                    .attr('stroke-width', '1px')
+                    .attr("fill", d => vis.colorScale(d.total))
+                    .attr("opacity", "1")
+                    .attr("stroke", "grey");
+
+                vis.tooltip
+                    .style("opacity", 0)
+                    .style("left", 0)
+                    .style("top", 0)
+                    .html(``);
+            });
+
         vis.svg.select(".y-axis")
             .transition()
             .duration(800)
@@ -157,15 +227,8 @@ class CasualtyVis {
             .transition()
             .duration(800)
             .call(vis.xAxis);
-    }
 
-    onSelectionChange (rangeStart, rangeEnd){
-        let vis = this;
-        let dateFormatter = d3.timeFormat("%Y")
-
-        d3.select("#start").text(dateFormatter(rangeStart));
-        d3.select("#end").text(dateFormatter(rangeEnd));
-
-        vis.wrangleData();
+        // Call brush component
+        vis.brushGroup.call(vis.brush);
     }
 }

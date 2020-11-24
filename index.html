@@ -35,63 +35,128 @@
 
     <!-- Title -->
     <div class="section" id="introSection">
-      <div class="container">
-        <div class="vertical-center">
+        <div class="container" style="height: 40vh">
           <p> Introduction</p>
+          <p>Extreme heat weather has become more frequent in the United States in the recent decades. When people are exposed to extreme heat, they can suffer from potentially heat-related illnesses such as heat exhaustion and heat stroke. In the worst case, extreme weather can directly or indirectly increase the incidence of deaths. This website is designed to remember the lives lost due to this natural disaster and to alarm the public of the threat of extreme heat in the hope of calling for individual actions that stop climate change.</p>
         </div>
       </div>
     </div>
     
     <!-- Dot charts for Heat-Related Deaths -->
     <div class="section" id="casualtySection">
-      <div class="container" style="border: 0px">
-        <div class="vertical-center">
+      <div class="container" style="height: 25vh">
+          <!-- Header -->
           <div class="row">
             <div class="col-md-12">
-              <h3><span class="h3-sub">Heat-Related Deaths in the US.</span> 1999-2018</h3>
-              <h4>Attention!</h4>
+              <h1><span class="h1-sub">Heat-Related Deaths in the US.</span> 1999-2018</h1>
+              <h2>Attention!</h2>
               <div class = "row">
                 <div id = "start">1999</div>
                 <p style="padding-left: 4px; padding-right: 4px"> - </p>
                 <div id = "end">2018</div>
               </div>
+              <p style="padding-left: 4px; padding-right: 4px; color: darkgrey"> (Select a specific year range by brushing the timeline) </p>
+        
             </div>
           </div>
+          <!-- Header -->
         
+          <!-- Total Div -->
           <div class="row">
             <div class="col-md-12">
-              <div id="totaldiv"></div>
+              <div id="totalDiv"></div>
             </div>
           </div>
+          <!-- Total Div -->
         
+          <!-- Category Selector and Dot Div -->
           <div class="row">
             <div>
-              <select id="categorySelector" class="custom-select align-self-center" style="width: 70%" onchange = "categoryChange()">
-                <option value="absDeathsByGender">Average Deaths by Gender (absolute)</option>
-                <option value="absDeaths">Average Deaths per Year (absolute)</option>
-                <option value="absDeathsByRace">Average Deaths by Racial Group (absolute)</option>
-                <option value="absDeathsByAge">Average Deaths by Age Group (absolute)</option>
-                <option value="relDeathsByGender">Average Deaths by Gender (relative to population)</option>
-                <option value="relDeathsByRace">Average Deaths by Racial Group (relative to population)</option>
-                <option value="relDeathsByAge">Average Deaths by Age Group (relative to population)</option>
+              <select id="categorySelector" class="custom-select align-self-center" style="width: 90%" onchange = "categoryChange()">
+                <option value="absDeaths">Average Deaths per Year</option>
+                <option value="absDeathsByGender">Average Deaths by Gender</option>
+                <option value="absDeathsByRace">Average Deaths by Racial Group</option>
+                <option value="absDeathsByAge">Average Deaths by Age Group</option>
               </select>
-            </div>
+              <div>
+                <p style="padding-left: 4px; padding-right: 4px; color: darkgrey">(Select a specific demographic category)</p>
+              </div>
+            </div> 
         
             <div class="col-md-12">
-              <div id="dotdiv"></div>
+              <div id="dotDiv"></div>
             </div>
         
-            </div>
           </div>
+          <!-- Category Selector and Dot Div -->
+          
         </div>
       </div>
     </div>
 
     <!-- Radial Stacked Bar Graph for Vulnerable Population -->
     <div class="section" id="vulnerableSection">
-      <div class="container">
-        <div class="vertical-center">
-          <p> Vulnerable Population</p>
+        <div class="container" style="height: 8vh">
+          <!-- Header -->
+          <div class="row">
+              <div class="col-md-12">
+                  <h1><span class="h1-sub">When and where are people vulnerable to extreme heat?
+              </div>
+          </div>
+          <!-- Header -->
+          <div class="row" style="height: 70vh; background: white; padding: 0;">
+
+            <!-- LEFT -->
+            <div class="col-7">
+              <div class="row" style="background: lightgrey;">
+                    <!-- Radial Bar -->
+                      <div class="col">
+                        <div class="row" style="height: 70vh; background: lightgrey; padding: 1vh;">
+                          <div id="radialbarDiv" style="height: 100%; width:100%; border: thin solid grey; border-radius: 5px; background: rgba(64,64,64,0.4);">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+        
+            </div>
+        
+            <!-- RIGHT -->
+            <div class="col-5">
+              <div class="row" style="height: 20%; background: lightgrey; padding-left: 0vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
+                <div class="col" style="border: thin solid grey; border-radius: 5px; background: rgba(64,64,64,0.4)">
+                  <div class="row" style="height: 100%">
+                    <div class="col-10">
+                      <div class = "row">
+                        <p style="padding-left: 4px; padding-right: 4px"> From </p>
+                        <div id = "startSecond">1999-Jan</div>
+                        <p style="padding-left: 4px; padding-right: 4px"> to </p>
+                        <div id = "endSecond">2011-Dec</div>
+                        <p style="padding-left: 4px; padding-right: 4px; color: brown"> (Select a specific time range by brushing the timeline at bottom) </p>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="row justify-content-center" style="height: 100%">
+        
+                        <div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center" style="height: 80%; background: lightgrey; padding-left: 0vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 0vh">
+                  <div id="map1Div" style="height: 100%; width: 100%"></div>
+              </div>
+        
+            </div>
+        
+          </div>
+          <div class="row" style="height: 18vh; background: #bdbdbd; padding: 0; border: 0">
+            <div id="brush1Div" style="height: 100%; width:100%;"></div>
+          </div>
+        
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -99,34 +164,51 @@
     <!-- Map visualization for Heat Waves -->
     <div class="section" id="heatwaveSection"> 
       <div class="container" style="border: 0px">
-        <div class="vertical-center">
-          <h1 class="title" id="title_location"></h1>
-          <p class="subtitle">Annual</p>
-          <div id="total_nv"></div>
-          <div class="row justify-content-center" style="height: 400px;">
-            <div class="align-self-center">
-              <div id="Chart_1"></div>
+          <div class="container"  style="background-color:white;">
+            <center>
+              <form id="form1">
+                <input class="zipcode" id="userdata" class="form-control">
+                <button class="zipcode" type="button" onclick="saveUserData()" class="btn btn-danger btn-lg mx-auto w-50 text-center">Check console</button>
+              </form>
+            </center>
+            <h1 class="title" id="title_location"></h1>
+            <p class="subtitle">Annual</p>
+            <div id="total_nv"></div>
+            <div class="row justify-content-center" style="height: 300px;margin-bottom: 40px">
+              <div class="align-self-center">
+                <div id="Chart_1"></div>
+              </div>
+            </div>
+            <div class="row justify-content-center" style="height: 400px;">
+              <div class="col-md-4" style="text-align:center;">
+                <p class="subtitle" id="month_subtitle">Monthly</p>
+                <div id="Chart_2"></div>
+              </div>
+              <div class="col-md-4" style="text-align:center;">
+                <p class="subtitle" id="day_subtitle">Daily</p>
+                <div id="Chart_3"></div>
+              </div>
+              <div class="col-md-4" style="text-align:center;">
+                <p class="subtitle">Legend</p>
+                <div id="legend"></div>
+                <p class="subtitle" id="instructions">Instructions</p>
+                <p class="instruction">- Click on the chart to zoom into a specific time</p>
+                <p class="instruction">- Hover on the chart and statistics will appear for given period</p>
+                <p class="instruction">- Heat index hours is the sum of the hours heat index exceed 33°C</p>
+              </div>
             </div>
           </div>
-          <div class="row justify-content-center" style="height: 400px;">
-            <div class="col-md-4" style="text-align:center;">
-              <p class="subtitle" id="month_subtitle">Monthly</p>
-              <div id="Chart_2"></div>
-            </div>
-            <div class="col-md-4" style="text-align:center;">
-              <p class="subtitle" id="day_subtitle">Daily</p>
-              <div id="Chart_3"></div>
-            </div>
-            <div class="col-md-3" style="text-align:center;">
-              <p class="subtitle" id="day_subtitle">Legend</p>
-              <div id="legend"></div>
-            </div>
+    
+        <footer class="py-5 bg-dark">
+          <div class="container" class="text-center">
+            <p class="m-0 text-center text-white">Copyright &copy; Team KCK</p>
           </div>
-        </div>
+          <!-- /.container -->
+        </footer>
       </div>
     </div>
 
-    <!-- Map Visualization for Natural Disasters -->
+   <!-- Map Visualization for Natural Disasters -->
     <div class="section" id="disasterSection"> 
       <div class="container">
         <div class="vertical-center">
@@ -134,7 +216,10 @@
             <div class="col-md-12">
               <div class="col-12">
                 <div class="row" style="background: lightgrey; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
-                  <div id="disasterdiv" class="align-self-center" style="height: 90vh; width:132vh; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
+                  <div id="disasterdiv" class="align-self-center" style="height: 80vh; width:132vh; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
+                </div>
+                <div class="row" style="background: lightgray; padding-left: 1vh; padding-bottom: 1vh; padding-right: 1vh; padding-top: 1vh">
+                  <div id="lineDiv" class="align-self-center" style="height: 8vh; width:132vh; border: thin solid grey; border-radius: 5px; background: lightcyan"></div>
                 </div>
               </div>
             </div>
@@ -156,7 +241,7 @@
                       <div class="col-8">
                         <div class="row justify-content-center" style="height: 120%; width:50%">
                           <p class="align-self-center" >
-                            <select id='climateCategorySelector' class="custom-select align-self-center" onchange="categoryChange()">
+                            <select id='climateCategorySelector' class="custom-select align-self-center" onchange="categoryChangeCarbon()">
                               <option value="cum_heatwaves" selected>Cumulative Heat Wave Days</option>
                               <option value="avg_heatwaves">Average Heat Wave Days</option>
                             </select>
@@ -199,7 +284,7 @@
     </div>
 
 	<!-- embedding JS libraries -->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
@@ -207,13 +292,17 @@
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 	<script src="https://d3js.org/topojson.v2.min.js"></script>
-	<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
   <!-- Your implementation -->
   <script src="js/main.js"></script>
   <script src="js/heatmap.js"></script>
   <script src="js/final_dotVis.js"></script>
   <script src="js/final_casualtyVis.js"></script>
+  <script src="js/final_brushVis.js"></script>
+  <script src="js/final_radialbarVis.js"></script>
+  <script src="js/final_mapVis.js"></script>
   <script src="js/carbonVis.js"></script>
   <script src="js/brushVis.js"></script>
   <script src="js/disastermap.js"></script>

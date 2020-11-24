@@ -81,7 +81,7 @@ BrushVis.prototype.initVis = function() {
     vis.brush = d3.brushX()
         .extent([[0, 0], [vis.width, vis.height]])
         .on("brush end", function(event){
-            selectedTimeRange = [vis.x.invert(event.selection[0]), vis.x.invert(event.selection[1])];
+            selectedTimeRangeCarbon = [vis.x.invert(event.selection[0]), vis.x.invert(event.selection[1])];
             myCarbonVis.wrangleData();
         });
 

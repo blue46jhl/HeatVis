@@ -20,7 +20,7 @@ class DisasterMapVis{
     initMap(){
         let vis = this;
         
-        vis.margin = {top: 40, right:40, bottom: 60, left: 60};
+        vis.margin = {top: 10, right:40, bottom: 10, left: 60};
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
         vis.height = $("#" + vis.parentElement).height() - vis.margin.top - vis.margin.bottom;
 
@@ -48,7 +48,7 @@ class DisasterMapVis{
         vis.country = topojson.feature(vis.geoData,vis.geoData.objects.states).features;
 
         // define viewpoint and zoom
-        vis.viewpoint = {'width': 975, 'height': 610};
+        vis.viewpoint = {'width': 975, 'height': 510};
             vis.zoom = vis.width / vis.viewpoint.width;
 
         // Draw states
@@ -235,7 +235,7 @@ class DisasterMapVis{
                         .html(`
                             <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 20px">
                                 <h3>${d.properties.name}<h3>
-                                <h4> Heat Index: ${vis.stateInfo[d.properties.name].heat_index}</h4>      
+                                <h4> Heat Index: ${(vis.stateInfo[d.properties.name].heat_index).toFixed(2)}</h4>      
                                 <h4> Disaster Count: ${vis.stateInfo[d.properties.name].disaster_count}</h4>    
                             </div>`)
                 })

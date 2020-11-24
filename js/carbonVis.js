@@ -81,13 +81,12 @@ class CarbonVis {
         let filteredData = [];
 
         // if there is a region selected
-        if (selectedTimeRange.length !== 0){
-            //console.log('region selected', vis.selectedTimeRange, vis.selectedTimeRange[0].getTime() )
+        if (selectedTimeRangeCarbon.length !== 0){
 
             // iterate over all rows the csv (dataFill)
             vis.heatData.forEach( row => {
                 // and push rows with proper dates into filteredData
-                if (selectedTimeRange[0].getTime() <= vis.parseDate(row.Year).getTime() && vis.parseDate(row.Year).getTime() <= selectedTimeRange[1].getTime() ){
+                if (selectedTimeRangeCarbon[0].getTime() <= vis.parseDate(row.Year).getTime() && vis.parseDate(row.Year).getTime() <= selectedTimeRangeCarbon[1].getTime() ){
                     filteredData.push(row);
                 }
             });
@@ -147,8 +146,15 @@ class CarbonVis {
                     .transition()
                     .duration(800)
                     .style("opacity", .9)
-                vis.tooltip.html("Year: " + vis.formatDate(d.year) + "</br>" + selectedCategory + ": " + d[selectedCategory])
-                    .style("left", (event.pageX) + "px")		
+                // "Year: " + vis.formatDate(d.year) + "</br>" + selectedCategory + ": " + d[selectedCategory]
+                vis.tooltip.html(
+                    `<div style="border: thin solid grey; border-radius: 2px; background: lightgrey; padding: 10px">
+                        <h3>${vis.formatDate(d.year)}<h3>
+                        <h4> Total Number of Heat Waves: ${(d.cum_heatwaves).toLocaleString()}</h4>      
+                        <h4> Average Number of Heat Waves: ${d.avg_heatwaves}</h4>    
+                    </div>`
+                )
+                    .style("left", (event.pageX + 20) + "px")		
                     .style("top", (event.pageY - 100) + "px")
             })
             .on("mouseout", function(d) {
