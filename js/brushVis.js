@@ -109,7 +109,7 @@ BrushVis.prototype.wrangleDataStatic = function() {
         )
     })
     // get dates between 1981-2010
-    vis.finalData = vis.displayData.slice(230, 263)
+    vis.finalData = vis.displayData.slice(230, 260)
     this.wrangleData();
 };
 

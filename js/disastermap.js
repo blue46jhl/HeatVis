@@ -6,8 +6,9 @@
 class DisasterMapVis{
 
     // constructor method to initialize Timeline object
-    constructor(parentElement, disasterData, geoData, heatData, zipData) {
+    constructor(parentElement, parentElement2, disasterData, geoData, heatData, zipData) {
         this.parentElement = parentElement;
+        this.parentElement2 = parentElement2;
         this.disasterData = disasterData;
         this.geoData = geoData;
         this.heatData = heatData;
@@ -20,15 +21,33 @@ class DisasterMapVis{
     initMap(){
         let vis = this;
         
+        // defining margins and dimensions for map vis
         vis.margin = {top: 10, right:40, bottom: 10, left: 60};
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
         vis.height = $("#" + vis.parentElement).height() - vis.margin.top - vis.margin.bottom;
+        // defining margins and dimensions for line vis
+        vis.margin_2 = {top: 10, right:40, bottom: 10, left: 60};
+        vis.width_2 = $("#" + vis.parentElement2).width() - vis.margin_2.left - vis.margin_2.right;
+        vis.height_2 = $("#" + vis.parentElement2).height() - vis.margin_2.top - vis.margin_2.bottom;
 
         // init drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
             .attr("width", vis.width)
             .attr("height", vis.height)
             .attr('transform', `translate (${vis.margin.left}, ${vis.margin.top})`);
+
+        vis.svg_2 = d3.select("#" + vis.parentElement2).append("svg")
+            .attr("width", vis.width_2)
+            .attr("height", vis.height_2)
+            .attr('transform', `translate (${vis.margin_2.left}, ${vis.margin_2.top})`);
+        
+        vis.disasterLine = vis.svg_2.append("rect")
+            .attr("class", "disaster_line")
+            .attr("stroke", "black")
+            .attr("fill", "lightblue")
+            .attr("height", 30)
+            .attr("stroke-width", 1)
+            .attr("transform", "translate(5,0)")
 
         // add title
         vis.svg.append('g')
@@ -79,6 +98,15 @@ class DisasterMapVis{
             .enter().append("stop")
             .attr("offset", d => d.offset)
             .attr("stop-color", d => d.color);
+
+        vis.x_2 = d3.scaleLinear()
+            .domain([0, 3832])
+            .range([0,1000])
+        
+        vis.xAxis_2 = vis.svg_2.append("g")
+            .attr("transform", "translate(5,30)")
+            .call(d3.axisBottom(vis.x_2))
+            .attr("class", "x_axis_2")
 
         vis.x = d3.scaleLinear()
             .range([0,vis.width / 4])
@@ -208,7 +236,20 @@ class DisasterMapVis{
             }
         })
 
-        console.log(vis.stateInfo)
+        console.log("final data set", vis.stateInfo)
+
+        // fetching disaster count average 
+        let counter = 0;
+        let total = 0; 
+
+        Object.entries(vis.stateInfo).forEach(([k,v]) => {
+            counter += 1 
+            if (typeof v.disaster_count !== 'undefined') {
+                total += v.disaster_count
+            }
+        })
+
+        vis.disaster_count_avg = total/counter
 
         vis.updateMap()
 
@@ -216,6 +257,17 @@ class DisasterMapVis{
 
     updateMap(){
         let vis = this;
+
+        vis.disasterAvgLine = vis.svg_2.append("rect")
+            .attr("class", "disaster_avg_line")
+            .attr("stroke", "black")
+            .attr("fill", "indigo")
+            .attr("opacity", 1)
+            .attr("width", vis.x_2(vis.disaster_count_avg))
+            .attr("height", 30)
+            .attr("stroke-width", 4)
+            .attr("transform", "translate(5,0)")
+            
 
         vis.colorScale.domain([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])
         vis.states
@@ -238,6 +290,14 @@ class DisasterMapVis{
                                 <h4> Heat Index: ${(vis.stateInfo[d.properties.name].heat_index).toFixed(2)}</h4>      
                                 <h4> Disaster Count: ${vis.stateInfo[d.properties.name].disaster_count}</h4>    
                             </div>`)
+                    vis.disasterLine
+                        .transition()
+                        .duration(300)
+                        .attr("width", vis.x_2(vis.stateInfo[d.properties.name].disaster_count))
+                    vis.disasterAvgLine
+                        .transition()
+                        .duration(100)
+                        .attr("opacity", .2)
                 })
                 .on('mouseout', function(event, d){
                     d3.select(this)
@@ -245,12 +305,15 @@ class DisasterMapVis{
                         .attr("stroke", "black")
                         .attr("opacity", 1)
                         .style("fill", d => vis.colorScale(vis.stateInfo[d.properties.name].heat_index))
-       
                     vis.tooltip
                         .style("opacity", 0)
                         .style("left", 0)
                         .style("top", 0)
-                        .html(``);
+                        .html(``)
+                    vis.disasterLine
+                        .attr("width", 0)
+                    vis.disasterAvgLine
+                        .attr("opacity", .8)
                 })
         vis.xAxis.tickValues([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])
         vis.x.domain([0,d3.max(Object.entries(vis.stateInfo), d => d[1].heat_index)])

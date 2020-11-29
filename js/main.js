@@ -74,7 +74,8 @@ function initMainPage(dataArray) {
 
     // init maps
     myMapVis = new MapVis("map1Div", dataArray[8], dataArray[9]);
-    myDisasterMapVis = new DisasterMapVis('disasterdiv', dataArray[2], dataArray[3], dataArray[5], dataArray[6])
+    myDisasterMapVis = new DisasterMapVis('disasterdiv', 'lineDiv', dataArray[2], dataArray[3], dataArray[5], dataArray[6])
+
 
     // (5) Bind event handler
     $(MyEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
