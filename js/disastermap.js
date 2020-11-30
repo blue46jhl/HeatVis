@@ -22,7 +22,7 @@ class DisasterMapVis{
         let vis = this;
         
         // defining margins and dimensions for map vis
-        vis.margin = {top: 10, right:40, bottom: 10, left: 60};
+        vis.margin = {top: 50, right:40, bottom: 40, left: 60};
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
         vis.height = $("#" + vis.parentElement).height() - vis.margin.top - vis.margin.bottom;
         // defining margins and dimensions for line vis
@@ -55,7 +55,7 @@ class DisasterMapVis{
             .append('text')
             .text('Historical Natural Disaster Trends 1930-2010')
             .attr("font-family", "Gothic")
-            .attr("font-weight", 900)
+            .attr("font-weight", 700)
             .attr("font-size", "20px")
             .attr('transform', `translate(${vis.width / 2}, 20)`)
             .attr('text-anchor', 'middle');

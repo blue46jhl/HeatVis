@@ -6,27 +6,13 @@
     font-size: 30px;
 }
 
-.container {
-    height: 80%;
-    position: relative;
-    border: 3px solid blue;
-    top: 40%;
-  }
 .section {
-    height: 1000px;
-}
-
-.vertical-center {
-    margin: 0;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-
-#introSection {
-    margin-top: 0px;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
+
 
 body {
     background: no-repeat center center fixed;

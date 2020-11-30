@@ -64,18 +64,17 @@ function initMainPage(dataArray) {
     let MyEventHandler = {};
 
     // init visualizations
+    myDisasterMapVis = new DisasterMapVis('disasterdiv', 'lineDiv', dataArray[2], dataArray[3], dataArray[5], dataArray[6])
+    myCarbonVis = new CarbonVis('carbondiv', dataArray[1], dataArray[4]);
+    myBrushVis = new BrushVis('brushDiv', dataArray[1]);
     myCasualtyVis = new CasualtyVis('totalDiv', dataArray[0], MyEventHandler);
     myDotVis = new DotVis('dotDiv', dataArray[0]);
-    myCarbonVis = new CarbonVis('carbondiv', dataArray[1], dataArray[4]);
     myRadialBarVis = new RadialBarVis('radialbarDiv', dataArray[7]);
      // init brush
     myBrush1Vis = new Brush1Vis('brush1Div', dataArray[7]);
-    myBrushVis = new BrushVis('brushDiv', dataArray[1]);
 
     // init maps
     myMapVis = new MapVis("map1Div", dataArray[8], dataArray[9]);
-    myDisasterMapVis = new DisasterMapVis('disasterdiv', 'lineDiv', dataArray[2], dataArray[3], dataArray[5], dataArray[6])
-
 
     // (5) Bind event handler
     $(MyEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
