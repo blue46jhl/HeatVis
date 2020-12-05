@@ -93,5 +93,19 @@ function categoryChange() {
     myDotVis.wrangleData(); // maybe you need to change this slightly depending on the name of your MapVis instance
 }
 
+$(document).ready(function() {
+    $("#toggle").click(function() {
+      var elem = $("#toggle").text();
+      if (elem == "The Mission (click to read)") {
+        //Stuff to do when btn is in the read more state
+        $("#toggle").text("Close Note");
+        $("#info").slideDown();
+      } else {
+        //Stuff to do when btn is in the read less state
+        $("#toggle").text("The Mission (click to read)");
+        $("#info").slideUp();
+      }
+    });
+  });
 
 
