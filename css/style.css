@@ -130,6 +130,7 @@ button{
     line-height: 2;
     font-family: "", "cursive";
     font-weight: 900;
+    font-size: 18px;
     border: 1px solid black;
     border-radius: 10px;
     padding: 50px;
